@@ -1,5 +1,7 @@
+
 #include <stdio.h>
 #include "parking.h"
+#include "special_parking.h"
 
 int main()
 {
@@ -9,15 +11,23 @@ int main()
 
     while (1)
     {
-        printf("\n========== MULTI-STOREY PARKING ==========\n");
-        printf("1. Park Vehicle\n");
+        printf("\n======= MULTI-STOREY PARKING =======\n");
+        printf("1. Park Regular Vehicle\n");
         printf("2. Search Vehicle\n");
         printf("3. Display Parking Status\n");
-        printf("4. Exit\n");
-        printf("==========================================\n");
+        printf("4. Display Reserved Slots\n");
+        printf("5. Park Special Vehicle\n");
+        printf("6. Vehicle Exit\n");
+        printf("7. Exit Application\n");
+        printf("====================================\n");
 
         printf("Enter your choice: ");
-        scanf("%d", &choice);
+
+        if (scanf("%d", &choice) != 1)
+        {
+            printf("Invalid input!\n");
+            return 1;
+        }
 
         switch (choice)
         {
@@ -34,13 +44,23 @@ int main()
                 break;
 
             case 4:
-                printf("\nThank you!\n");
+                displayReservedSlots();
+                break;
+
+            case 5:
+                parkSpecialVehicle();
+                break;
+
+            case 6:
+                exitVehicle();
+                break;
+
+            case 7:
+                printf("Thank you!\n");
                 return 0;
 
             default:
-                printf("\nInvalid choice! Please try again.\n");
+                printf("Invalid choice!\n");
         }
     }
-
-    return 0;
 }

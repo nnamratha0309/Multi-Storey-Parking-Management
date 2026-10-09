@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "parking.h"
+#include "special_parking.h"
 
 int parking[FLOORS][SLOTS_PER_FLOOR];
 Vehicle vehicles[MAX_VEHICLES];
@@ -17,6 +18,7 @@ void initializeParking()
     }
 
     vehicleCount = 0;
+    initializeReservedSlots();
 }
 void parkVehicle()
 {
@@ -48,7 +50,8 @@ void parkVehicle()
         // Search slots sequentially
         for (int j = 0; j < SLOTS_PER_FLOOR; j++)
         {
-            if (parking[i][j] == 0)
+            if (parking[i][j] == 0 &&
+    reservedParking[i][j] == 0)
             {
                 // Mark slot as occupied
                 parking[i][j] = 1;
