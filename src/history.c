@@ -60,7 +60,12 @@ void exitVehicle(void)
     int i, j;
 
     printf("\nEnter registration number of exiting vehicle: ");
-    scanf("%19s", registrationNumber);
+
+if (scanf("%19s", registrationNumber) != 1)
+{
+    printf("Invalid input!\n");
+    return;
+}
 
     for (i = 0; i < vehicleCount; i++)
     {

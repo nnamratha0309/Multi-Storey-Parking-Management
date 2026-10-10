@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include "analysis.h"
+#include "special_parking.h"
+
 
 void displayOccupancyAnalysis(void)
 {
     int i, j;
-    int occupied, available;
+    int occupied, available, reserved;
     int totalOccupied = 0;
+    int totalAvailable = 0;
+    int totalReserved = 0;
     int totalSlots = FLOORS * SLOTS_PER_FLOOR;
 
     printf("\n========== OCCUPANCY ANALYSIS ==========\n");
@@ -13,6 +17,8 @@ void displayOccupancyAnalysis(void)
     for (i = 0; i < FLOORS; i++)
     {
         occupied = 0;
+        available = 0;
+        reserved = 0;
 
         for (j = 0; j < SLOTS_PER_FLOOR; j++)
         {
@@ -20,24 +26,37 @@ void displayOccupancyAnalysis(void)
             {
                 occupied++;
             }
+            else if (reservedParking[i][j] == 1)
+            {
+                reserved++;
+            }
+            else
+            {
+                available++;
+            }
         }
 
-        available = SLOTS_PER_FLOOR - occupied;
         totalOccupied += occupied;
+        totalAvailable += available;
+        totalReserved += reserved;
 
         printf("\nFloor %d\n", i + 1);
-        printf("Occupied Slots : %d\n", occupied);
-        printf("Available Slots: %d\n", available);
-        printf("Occupancy      : %.1f%%\n",
+        printf("Occupied Slots       : %d\n", occupied);
+        printf("Available Regular Slots: %d\n", available);
+        printf("Reserved Slots       : %d\n", reserved);
+        printf("Occupancy            : %.1f%%\n",
                occupied * 100.0 / SLOTS_PER_FLOOR);
     }
 
-    printf("\nTotal Parking Slots : %d\n", totalSlots);
-    printf("Total Occupied      : %d\n", totalOccupied);
-    printf("Total Available     : %d\n", totalSlots - totalOccupied);
-    printf("Overall Occupancy   : %.1f%%\n",
+    printf("\nTotal Parking Slots       : %d\n", totalSlots);
+    printf("Total Occupied            : %d\n", totalOccupied);
+    printf("Total Available Regular   : %d\n", totalAvailable);
+    printf("Total Reserved            : %d\n", totalReserved);
+    printf("Overall Occupancy         : %.1f%%\n",
            totalOccupied * 100.0 / totalSlots);
 }
+
+
 
 void guideToAvailableSlot(void)
 {
@@ -49,7 +68,8 @@ void guideToAvailableSlot(void)
     {
         for (j = 0; j < SLOTS_PER_FLOOR; j++)
         {
-            if (parking[i][j] == 0)
+            if (parking[i][j] == 0 &&
+                reservedParking[i][j] == 0)
             {
                 printf("Available parking slot found!\n");
                 printf("Floor: %d\n", i + 1);
@@ -61,5 +81,6 @@ void guideToAvailableSlot(void)
         }
     }
 
-    printf("Sorry! All parking slots are occupied.\n");
+    printf("Sorry! No regular parking slots are available.\n");
 }
+
